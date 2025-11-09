@@ -14,15 +14,19 @@
     font-family: 'Arial', sans-serif;
 }
 
-/* 调整内容区域顶部间距 */
+/* 全局布局 */
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
-    padding-top: 0px; /* 增加顶部间距适应新导航栏 */
+    padding-top: 0px;
     padding-bottom: 120px;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
 }
 
-/* 顶部导航栏样式 - 修改为浮动样式 */
+/* 顶部导航栏样式 - 移动端优化 */
 .top-navbar {
     position: fixed;
     top: 20px;
@@ -38,6 +42,16 @@ body {
     overflow-x: auto;
 }
 
+/* 移动端导航栏靠左对齐 */
+
+@media (max-width: 768px) {
+    .top-navbar {
+        left: 10px;
+        transform: none;
+        right: 10px;
+        max-width: calc(100% - 20px);
+    }
+}
 .nav-container {
     display: flex;
     gap: 15px;
@@ -49,7 +63,7 @@ body {
     flex-direction: column;
     align-items: center;
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 5px;
     cursor: pointer;
     transition: all 0.3s;
     min-width: 80px;
@@ -68,7 +82,7 @@ body {
 .nav-icon {
     width: 40px;
     height: 40px;
-    border-radius: 8px;
+    border-radius: 3px;
     overflow: hidden;
     margin-bottom: 5px;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
@@ -97,8 +111,10 @@ body {
 /* 内容区域样式 */
 .content {
     display: none;
-    padding: 20px;
-    min-height: calc(100vh - 180px); /* 调整高度适应底部Dock */
+    padding: 10px;
+    min-height: calc(100vh - 180px);
+    height: 100vh;
+    overflow: hidden;
 }
 
 .content.active {
@@ -107,19 +123,9 @@ body {
 
 /* 内容头部样式 */
 .content-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    padding: 10px 15px;
-    background-color: var(--content-bg);
-    border-radius: 5px;
+    display: none; /* 隐藏内容头部，使用浮动控制栏替代 */
 }
 
-.content-header h2 {
-    color: var(--text-color);
-    font-size: 1.5rem;
-}
 /* 浮动控制栏样式 */
 .floating-controls {
     position: absolute;
@@ -136,182 +142,23 @@ body {
 .floating-controls > * {
     pointer-events: auto;
 }
-/* 任务提示框样式 - 固定在左侧 */
-.task-tooltip {
-    position: fixed;
-    left: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: var(--content-bg);
-    padding: 0;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
-    z-index: 1000;
-    max-width: 320px;
-    display: none;
-    line-height: 1.4;
-    max-height: 80vh;
-    overflow: hidden;
-    border: 1px solid #444;
-}
 
-/* 隐藏所有滚动条 */
-.task-tooltip::-webkit-scrollbar {
-    display: none;
-}
-
-.task-tooltip {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-}
-
-/* 任务提示框头部 */
-.task-tooltip-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 15px 10px 15px;
-    border-bottom: 1px solid #444;
-    background-color: rgba(0, 0, 0, 0.3);
-}
-
-.task-tooltip-title {
-    font-size: 16px;
-    font-weight: bold;
-    color: #eee;
-    margin: 0;
-    flex: 1;
-    padding-right: 10px;
-}
-
-.task-tooltip-close {
-    background: none;
-    border: none;
-    color: #999;
-    font-size: 24px;
-    cursor: pointer;
-    padding: 0;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 3px;
-    transition: all 0.3s;
-}
-
-.task-tooltip-close:hover {
-    color: #fff;
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-/* 任务提示框内容区域 */
-.task-tooltip-info {
-    padding: 15px;
-    max-height: calc(80vh - 150px);
-    overflow-y: auto;
-}
-
-/* 隐藏内容区域的滚动条 */
-.task-tooltip-info::-webkit-scrollbar {
-    display: none;
-}
-
-.task-tooltip-info {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-
-/* 任务图片 */
-.task-image {
-    width: 100%;
-    height: 160px;
-    object-fit: cover;
-    display: block;
-}
-
-/* 任务信息行 */
-.task-info-row {
-    display: flex;
-    justify-content: space-between;
-    margin: 10px 0 15px 0;
-    font-size: 13px;
-}
-
-/* 任务目标和奖励区域 */
-.task-objectives,
-.task-rewards {
-    margin-bottom: 15px;
-}
-
-.task-section-title {
-    margin-bottom: 8px;
-    font-size: 14px;
-    color: #4CAF50;
-}
-
-.task-objective,
-.task-reward {
-    margin-bottom: 5px;
-    font-size: 12px;
-    line-height: 1.3;
-    padding-left: 5px;
-}
-
-/* 移除鼠标移动事件的处理，因为现在位置固定了 */
-node.on('mousemove', function(event) {
-    // 空函数，不执行任何操作
-    // 提示框位置已经固定，不需要跟随鼠标
-});
-
-node.on('mouseout', function() {
-    // 不再自动隐藏，让用户通过关闭按钮控制
-});
-
-/* 确保提示框在移动设备上也能正常显示 */
-@media (max-width: 768px) {
-    .task-tooltip {
-        left: 10px;
-        right: 10px;
-        max-width: none;
-        top: 120px;
-        transform: none;
-        max-height: 60vh;
-    }
-    
-    .task-tooltip-info {
-        max-height: calc(60vh - 150px);
-    }
-}
 /* 统一控制栏样式 */
 .map-controls,
 .task-controls {
     background-color: var(--dock-bg);
     backdrop-filter: blur(10px);
-    border-radius: 10px;
+    border-radius: 5px;
     padding: 10px 15px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     display: flex;
-    gap: 15px; /* 统一间距 */
+    gap: 15px;
     align-items: center;
 }
 
-
-/* 调整主视图区域，为浮动控制栏留出空间 */
-#map-content .main-view,
-#tasks-content .main-view {
-    position: relative;
-    height: calc(100vh - 40px);
-}
-
-/* 移除原来的内容头部样式 */
-#map-content .content-header,
-#tasks-content .content-header {
-    display: none;
-}
 /* 主视图区域样式 */
 .main-view {
-    height: calc(100vh - 170px);
+    height: calc(100vh - 20px);
     background-color: var(--content-bg);
     border-radius: 5px;
     position: relative;
@@ -365,35 +212,197 @@ node.on('mouseout', function() {
     stroke-width: 3px !important;
 }
 
+.task-node:hover rect {
+    stroke-width: 4px !important;
+    filter: drop-shadow(0 0 8px rgba(76, 175, 80, 0.6));
+}
+
+.task-node.completed:hover rect {
+    filter: drop-shadow(0 0 8px rgba(76, 175, 80, 0.8));
+}
+
+/* 任务节点选中状态 */
+.task-node.selected rect {
+    stroke: #2196F3 !important;
+    stroke-width: 4px !important;
+    filter: drop-shadow(0 0 8px rgba(33, 150, 243, 0.6));
+}
+
 /* 任务提示框样式 - 固定在左侧 */
 .task-tooltip {
     position: fixed;
     left: 20px;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 150px;
+	bottom: 150px;
     background-color: var(--content-bg);
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
     z-index: 1000;
-    max-width: 320px;
+	width:400px;
     display: none;
     line-height: 1.4;
-    max-height: 80vh;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+.task-tooltip {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* 任务提示框头部 - 固定位置 */
+.task-tooltip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 15px 10px 15px;
+    border-bottom: 1px solid #444;
+    background-color: rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    flex-shrink: 0;
+}
+
+.task-tooltip-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #eee;
+    margin: 0;
+    flex: 1;
+    padding-right: 10px;
+}
+
+.task-tooltip-close {
+    background: none;
+    border: none;
+    color: #999;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    transition: all 0.3s;
+}
+
+.task-tooltip-close:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 任务提示框内容区域 - 可滚动 */
+.task-tooltip-info {
+    padding: 15px;
+    flex: 1;
     overflow-y: auto;
+    max-height: calc(80vh - 150px);
 }
 
-.task-tooltip div {
-    margin-bottom: 8px;
+/* 隐藏内容区域的滚动条 */
+.task-tooltip-info::-webkit-scrollbar {
+    display: none;
 }
 
+.task-tooltip-info {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* 任务图片 */
 .task-image {
     width: 100%;
-    height: 160px;
     object-fit: cover;
+    display: block;
+    border-radius: 4px;
     margin-bottom: 10px;
-    border-radius: 5px;
 }
+
+/* 任务信息行 */
+.task-info-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0 15px 0;
+    font-size: 13px;
+}
+
+/* 任务目标和奖励区域 */
+.task-objectives,
+.task-rewards,
+.task-guide {
+    margin-bottom: 15px;
+}
+
+.task-section-title {
+    margin-bottom: 8px;
+    font-size: 18px;
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.task-objective,
+.task-reward,
+.task-guide {
+    margin-bottom: 5px;
+    font-size: 16px;
+    line-height: 1.3;
+    padding-left: 5px;
+}
+
+/* 任务操作区域 - 固定在底部 */
+.task-actions {
+    padding: 15px;
+    border-top: 1px solid #444;
+    background-color: rgba(0, 0, 0, 0.3);
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    flex-shrink: 0;
+    text-align: center;
+}
+
+/* 状态切换按钮样式 */
+.status-toggle-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: bold;
+    transition: all 0.3s;
+    min-width: 140px;
+}
+
+.status-toggle-btn.completed {
+    background-color: #f44336;
+    color: white;
+}
+
+.status-toggle-btn.incomplete {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.status-toggle-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* 任务状态文本样式 */
+.status-text.completed {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.status-text.incomplete {
+    color: #999;
+    font-weight: bold;
+}
+
 /* 确保提示框在移动设备上也能正常显示 */
 @media (max-width: 768px) {
     .task-tooltip {
@@ -402,12 +411,12 @@ node.on('mouseout', function() {
         max-width: none;
         top: 120px;
         transform: none;
-        max-height: 70vh;
+        max-height: 80vh;
     }
-}
-/* 任务节点图片样式 */
-.task-node image {
-    border-radius: 5px;
+    
+    .task-tooltip-info {
+        max-height: calc(60vh);
+    }
 }
 
 /* 进度管理样式 */
@@ -464,7 +473,7 @@ node.on('mouseout', function() {
     padding: 10px 20px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
     z-index: 1000;
-    max-width: 90%;
+    max-width: 95%;
     overflow-x: auto;
 }
 
@@ -479,7 +488,7 @@ node.on('mouseout', function() {
     flex-direction: column;
     align-items: center;
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 5px;
     cursor: pointer;
     transition: all 0.3s;
     min-width: 80px;
@@ -498,7 +507,7 @@ node.on('mouseout', function() {
 .dock-icon {
     width: 60px;
     height: 60px;
-    border-radius: 12px;
+    border-radius: 3px;
     overflow: hidden;
     margin-bottom: 5px;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
@@ -523,7 +532,7 @@ node.on('mouseout', function() {
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    z-index: 1000;
+    z-index: 1001;
     max-width: 300px;
     display: none;
 }
@@ -552,21 +561,29 @@ node.on('mouseout', function() {
     background-color: var(--content-bg);
 }
 
-/* 响应式设计 - 导航栏 */
+/* 响应式设计 - 导航栏 & Dock栏 */
 @media (max-width: 768px) {
-    .top-navbar {
+    .top-navbar,
+	.bottom-dock {
         padding: 8px 15px;
-        border-radius: 15px;
+        border-radius: 5px;
     }
     
-    .nav-item {
+    .nav-item,
+	.dock-item
+	{
         min-width: 70px;
         padding: 8px;
     }
     
-    .nav-icon {
+    .nav-icon{
         width: 35px;
         height: 35px;
+    }
+	
+	.dock-icon{
+        width: 40px;
+        height: 40px;
     }
     
     .nav-icon svg {
@@ -574,11 +591,17 @@ node.on('mouseout', function() {
         height: 20px;
     }
     
-    .nav-name {
+    .nav-name,
+	.dock-name
+	{
         font-size: 11px;
     }
+	
+	.floating-controls{
+		top: 110px;
+		right: 0px;
+	}
 }
-
 /* 多分支连线样式 */
 .links line.branch {
     stroke: #FF9800;
@@ -596,19 +619,9 @@ node.on('mouseout', function() {
     stroke-width: 3;
 }
 
-/* 任务节点悬停效果增强 */
-.task-node:hover rect {
-    stroke-width: 4px !important;
-    filter: drop-shadow(0 0 8px rgba(76, 175, 80, 0.6));
-}
-
-.task-node.completed:hover rect {
-    filter: drop-shadow(0 0 8px rgba(76, 175, 80, 0.8));
-}
-
-/* 滚动条样式 */
+/* Dock栏滚动条样式 */
 .bottom-dock::-webkit-scrollbar {
-    height: 6px;
+    height: 3px;
 }
 
 .bottom-dock::-webkit-scrollbar-track {
@@ -623,42 +636,9 @@ node.on('mouseout', function() {
 
 .bottom-dock::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.5);
-
 }
-/* 移动设备响应式设计 */
-@media (max-width: 768px) {
-    /* 禁止body滚动 */
-    body {
-        overflow: hidden;
-        position: fixed;
-        width: 100%;
-        height: 100%;
-    }
-    
-    /* 确保内容区域可以滚动 */
-    .main-view {
-        overflow: auto;
-        -webkit-overflow-scrolling: touch; /* iOS平滑滚动 */
-    }
-    
-    /* 任务图容器滚动 */
-    #task-graph {
-        overflow: auto;
-    }
-    
-    /* 地图容器滚动 */
-    #map {
-        overflow: hidden;
-    }
-    
-    /* 调整内容区域高度 */
-    .content.active {
-        height: 100vh;
-        overflow: hidden;
-    }
-    
-    /* 调整底部dock位置 */
-    .bottom-dock {
-        bottom: 10px;
-    }
+
+/* 调整底部dock位置 */
+.bottom-dock {
+    bottom: 10px;
 }
